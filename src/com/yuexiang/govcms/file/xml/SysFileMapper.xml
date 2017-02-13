@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuexiang.govcms.file.dao.SysFileMapper">
+	<resultMap id="BaseResultMap" type="com.yuexiang.govcms.file.model.SysFile">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="f_name" property="fName" jdbcType="VARCHAR" />
+		<result column="f_time" property="fTime" jdbcType="TIMESTAMP" />
+		<result column="f_path" property="fPath" jdbcType="VARCHAR" />
+		<result column="f_size" property="fSize" jdbcType="VARCHAR" />
+		<result column="f_download" property="fDownload" jdbcType="INTEGER" />
+		<result column="f_type" property="fType" jdbcType="INTEGER" />
+		<result column="f_description" property="fDescription" jdbcType="VARCHAR" />
+		<result column="f_name_old" property="fNameOld" jdbcType="VARCHAR" />
+		<result column="md5" property="md5" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_id, f_name, f_time, f_path, f_size, f_download, f_type, f_description, f_name_old, md5
+	</sql>
+	<select id="check" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_file
+		where md5 = #{hash,jdbcType=INTEGER}
+		limit 1
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_file
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_file
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.yuexiang.govcms.file.model.SysFile">
+		insert into sys_file
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="fName != null">
+				f_name,
+			</if>
+			<if test="fTime != null">
+				f_time,
+			</if>
+			<if test="fPath != null">
+				f_path,
+			</if>
+			<if test="fSize != null">
+				f_size,
+			</if>
+			<if test="fDownload != null">
+				f_download,
+			</if>
+			<if test="fType != null">
+				f_type,
+			</if>
+			<if test="fDescription != null">
+				f_description,
+			</if>
+			<if test="fNameOld != null">
+				f_name_old,
+			</if>
+			<if test="md5 != null">
+				md5,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fPath != null">
+				#{fPath,jdbcType=VARCHAR},
+			</if>
+			<if test="fSize != null">
+				#{fSize,jdbcType=VARCHAR},
+			</if>
+			<if test="fDownload != null">
+				#{fDownload,jdbcType=INTEGER},
+			</if>
+			<if test="fType != null">
+				#{fType,jdbcType=INTEGER},
+			</if>
+			<if test="fDescription != null">
+				#{fDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="fNameOld != null">
+				#{fNameOld,jdbcType=VARCHAR},
+			</if>
+			<if test="md5 != null">
+				#{md5,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.yuexiang.govcms.file.model.SysFile">
+		update sys_file
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="fName != null">
+				f_name = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				f_time = #{fTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fPath != null">
+				f_path = #{fPath,jdbcType=VARCHAR},
+			</if>
+			<if test="fSize != null">
+				f_size = #{fSize,jdbcType=VARCHAR},
+			</if>
+			<if test="fDownload != null">
+				f_download = #{fDownload,jdbcType=INTEGER},
+			</if>
+			<if test="fType != null">
+				f_type = #{fType,jdbcType=INTEGER},
+			</if>
+			<if test="fDescription != null">
+				f_description = #{fDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="fNameOld != null">
+				f_name_old = #{fNameOld,jdbcType=VARCHAR},
+			</if>
+			<if test="md5 != null">
+				md5 = #{md5,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="getPageList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_file
+		<where>
+			<if test="subSQL != null and subSQL !='' ">
+				${subSQL}
+			</if>
+			<if test="search != null and search !=''">
+				and INSTR(ifnull(f_name_old,''),'${search}') > 0
+			</if>
+		</where>
+	</select>
+</mapper>
